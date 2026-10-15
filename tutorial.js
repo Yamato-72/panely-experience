@@ -17,8 +17,8 @@
   const observation=document.createElement('section');
   observation.className='tour-observation';observation.hidden=true;
   observation.setAttribute('aria-label','再生の確認');
-  observation.innerHTML='<strong></strong><p></p><button class="primary">次へ →</button><button class="tour-skip">案内をスキップ</button>';
-  $('#guide').before(observation);
+  observation.innerHTML='<div class="observation-copy"><small>操作ガイドは続きます</small><strong></strong><p></p></div><div class="observation-actions"><button class="primary">次へ →</button><button class="tour-skip">ここで案内を終える</button></div>';
+  $('.display-wrap').after(observation);
   observation.querySelector('.primary').onclick=()=>{if(!playbackSeen)playbackSeen=true;else unplugSeen=true;refresh();};
   observation.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
   const nextButton=document.createElement('button');nextButton.textContent='次へ →';nextButton.hidden=true;card.insertBefore(nextButton,finish);
@@ -73,10 +73,10 @@
     const wasObserving=!observation.hidden;
     observation.hidden=!observing;
     if(observing){
-      observation.querySelector('strong').textContent=!playbackSeen?'写真・動画が再生できました。':'USBを抜いても、再生が続いています。';
-      observation.querySelector('p').textContent=!playbackSeen?'まずは、ディスプレイに映った内容をご覧ください。確認できたら、次へ進んでUSBを抜く操作を試しましょう。':'取り込んだ素材は本体に保存されています。表示を確認できたら、編集画面への戻り方に進みましょう。';
-      observation.querySelector('.primary').textContent=!playbackSeen?'確認できたので、次へ →':'編集画面への戻り方を見る →';
-      if(!wasObserving)$('#screen').scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+      observation.querySelector('strong').textContent=!playbackSeen?'再生できました。次はUSBを抜いてみましょう。':'再生は続いています。次は編集画面に戻ってみましょう。';
+      observation.querySelector('p').textContent=!playbackSeen?'映った内容を確認したら、下のボタンで案内を進めてください。':'素材が本体に保存されていることを確認できました。下のボタンで操作を続けられます。';
+      observation.querySelector('.primary').textContent=!playbackSeen?'次へ：USBを抜く体験 →':'次へ：編集画面に戻る →';
+      if(!wasObserving)observation.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     }
     const next=step();nextButton.hidden=next?.[3]!=='explain';if(!next){hide();return;}
     const el=document.querySelector(next[0]);if(!el){hide();return;}
