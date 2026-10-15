@@ -157,3 +157,5 @@ footer{margin:16px 0;font-size:10px}
 @media(prefers-reduced-motion:reduce){#tour-complete .completion-options button{transition:none}}
 #tour-complete .completion-options{grid-template-columns:1fr}
 #tour-complete .completion-options button{min-height:76px;padding:14px 18px}
+.site-footer{max-width:1400px;margin:18px auto;padding:0 24px;align-items:center;line-height:1.7}.site-footer nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.site-footer a{font-size:12px;text-underline-offset:3px}.footer-tab-note{font-size:10px}.entry-screen{min-height:calc(100svh - 120px)}
+@media(max-width:600px){.site-footer{padding:0 20px;gap:10px}.site-footer nav{gap:10px 16px}.footer-tab-note{width:100%}.entry-screen{min-height:calc(100svh - 160px)}}
