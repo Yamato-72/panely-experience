@@ -1,0 +1,16 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PANELY 試作の再現範囲</title><link rel="stylesheet" href="style.css"><style>article{max-width:960px;margin:40px auto;padding:24px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:14px;border-bottom:1px solid #ddd;text-align:left}th{background:#eeefed}h2{margin-top:32px}code{overflow-wrap:anywhere}</style><article><a href="./">← 操作体験へ戻る</a><h1>再現範囲と、実機照合の状況</h1><p>基準：PANELY 0.70a-usb / versionCode 109。2026年10月15日作成。</p><p><strong>この試作は実機の全機能を完全再現した完成版ではありません。</strong>ソースに基づく操作フローを実装し、ブラウザで体験できる状態にしたものです。実機との画面・動作照合は未実施です。</p><table><thead><tr><th>範囲</th><th>試作の状態</th><th>照合元</th></tr></thead><tbody>
+<tr><td>初回の挨拶・表示用途選択</td><td>文言・3分岐を実装。画面寸法と改行はブラウザ向け調整。</td><td>SetupWizardActivity / WelcomeLayout</td></tr>
+<tr><td>USB・アクセス許可・再確認・診断</td><td>疑似USBで再現。フォルダなし・素材なし・読込失敗を体験条件から切替可能。コピー時間やOS通知は未再現。</td><td>SetupWizardActivity / UsbImporter</td></tr>
+<tr><td>素材の選択・追加・順序・削除・表示時間</td><td>サンプル素材で実装。削除後も素材ライブラリに残る。画像時間は5/10/15/30秒・ずっと。</td><td>ManageActivity</td></tr>
+<tr><td>再生・タッチ切替・無操作復帰</td><td>実装。動画は12秒のCSSアニメーション、HTMLは固定の施設案内。実ファイル・動画デコーダー・WebViewの再現は未対応。</td><td>PlaybackController / ViewerActivity</td></tr>
+<tr><td>URL</td><td>登録と再生切替のみ実装。外部サイトの描画・ログイン・ネットワーク障害は未再現。</td><td>ManageActivity / ContentRenderer</td></tr>
+<tr><td>リモコン・PIN</td><td>方向移動・決定・戻る・入力切替を実装。左上2秒長押しでPIN、戻るはPINなし。フォーカス移動はブラウザ独自。</td><td>PanelyReturn / RemoteInputKey</td></tr>
+<tr><td>複数プレイリスト</td><td>作成・選択・名前変更・コピー・削除。最後の1件と時間割使用中リストの削除を防止。</td><td>PlaylistLibraryActivity / PlaylistCatalog</td></tr>
+<tr><td>毎日の時間割</td><td>開始時刻・翌日への連続再生・ON/OFF・手動表示による停止・復帰を実装。時刻入力はHTML標準入力で、実機の＋/−入力UIとは異なる。欠損ファイルへの退避は未再現。</td><td>ScheduleActivity / DailySchedule / ScheduleRuntime</td></tr>
+<tr><td>HDMI</td><td>接続・切断・入力切替・戻りを疑似再現。実映像、カメラ権限、入力競合、信号検出エラーは未再現。</td><td>HdmiInActivity</td></tr>
+<tr><td>外部アプリ</td><td>固定サンプルの追加確認・起動・戻り。実機のインストーラー画面と各アプリの動作は未再現。</td><td>SetupWizardActivity / ExternalAppHostActivity</td></tr>
+<tr><td>操作音・焼き付き防止・PIN変更・初期化</td><td>設定保存・再起動体験に反映。取込完了音は元ソースの音源、全操作の音・モーションは未再現。</td><td>ManageActivity / Sfx / ViewerActivity</td></tr>
+<tr><td>管理画面の待機時計</td><td>60秒無操作で表示、操作で復帰。</td><td>ManageActivity</td></tr>
+<tr><td>電源・ホーム運用</td><td>電源ON/OFFと保存した設定での再開を疑似再現。メーカー起動ロゴ・OS起動・ホーム選択・自動復旧・実機の起動時間は未再現。</td><td>BootReceiver / StartupLaunchGuard（実機確認が必要）</td></tr>
+<tr><td>Android / ToolBox / 保守画面</td><td>Wi-Fiは仮画面。他のOS・メーカー設定と隠し保守メニューは未再現。</td><td>対象機種の資料・実機が必要</td></tr>
+</tbody></table><h2>完全再現に向けて必要な確認</h2><ol><li>対象ディスプレイの型番、縦横、タッチ対応、リモコン、端子位置。</li><li>0.70aを搭載した実機の初回起動と設定済み起動の画面。</li><li>各画面・ダイアログ・異常系をこの試作と並べて照合。</li><li>Android設定・ToolBox・外部アプリの範囲を確定し、画面と操作を追加。</li><li>社内検証後に、導入前のお客様向け公開版として表示を確定。</li></ol><p>Androidソース本体、社内資料、保守用コードは公開用フォルダへ同梱していません。</p></article></html>

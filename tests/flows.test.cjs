@@ -1,0 +1,22 @@
+// Offline application-state tests. This is not a browser layout or DOM test.
+const vm=require('node:vm'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const elements=new Map(),timers=[],intervals=[],storage=new Map();
+function element(selector){if(!elements.has(selector))elements.set(selector,{innerHTML:'',textContent:'',value:'',checked:true,style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},addEventListener(){},setAttribute(){},focus(){},scrollIntoView(){},insertAdjacentHTML(_,html){this.innerHTML+=html;},remove(){},close(){},showModal(){},selectedOptions:[{text:'正しいフォルダ・サンプル入り'}]});return elements.get(selector);}
+const ctx=vm.createContext({console,Date,Math,JSON,URL,Set,localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},document:{querySelector:q=>q==='.dialog-shade'?null:element(q),querySelectorAll:()=>[],addEventListener(){}},Audio:class{play(){return Promise.resolve()}},setTimeout:fn=>{timers.push(fn);return timers.length;},clearTimeout(){},setInterval:fn=>intervals.push(fn)});
+const root=path.resolve(__dirname,'..');for(const file of ['core.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx);
+const run=code=>vm.runInContext(code,ctx),value=code=>JSON.parse(run('JSON.stringify('+code+')'));let count=0;
+function test(name,fn){fn();count++;console.log('PASS '+name);}
+test('初回起動は挨拶へ',()=>{run('power()');timers.at(-1)();assert.equal(value('page'),'welcome');});
+test('USBのフォルダ不備後に再確認できる',()=>{run("action('choose:content');usb=true;condition='folders';importUsb()");assert.equal(value('page'),'usb');assert.equal(value('s.library.length'),0);run("condition='ready';importUsb()");assert.equal(value('page'),'pick');assert.equal(value('s.library.length'),4);});
+test('取り込みは重複登録しない',()=>{run("go('usb');importUsb()");assert.equal(value('s.library.length'),4);});
+test('素材選択・初回完了・再生',()=>{run("action('pick:cafe');action('pick:sale');action('add-picked')");assert.equal(value('page'),'done');assert.equal(value('list().main.length'),2);run("action('play')");assert.equal(value('page'),'play');assert.equal(value('s.setup'),true);});
+test('USBを抜いても取り込んだ素材は残る',()=>{run('usb=false;render()');assert.equal(value('s.library.length'),4);assert.equal(value('list().main.length'),2);assert.equal(value('page'),'play');});
+test('戻るはPINなし・タッチ用素材を追加',()=>{run("backKey();action('tab:touch');action('add');action('pick:html');action('add-picked')");assert.equal(value('page'),'manage');assert.equal(value('list().touch.length'),1);});
+test('タッチ切替と無操作復帰',()=>{run("action('play');touchPlay()");assert.equal(value('playTouch'),true);run('touchAt=Date.now()-31000');intervals[0]();assert.equal(value('playTouch'),false);});
+test('誤PINを拒否し0000で管理画面へ',()=>{run("pin='';go('pin');for(const d of '1111')action('digit:'+d)");assert.equal(value('page'),'pin');assert.equal(value('pin'),'');run("for(const d of '0000')action('digit:'+d)");assert.equal(value('page'),'manage');});
+test('素材の順番変更・削除はライブラリを保持',()=>{run("action('tab:main');action('edit:1');action('move:-1')");assert.equal(value('list().main[0].id'),'sale');run("action('remove')");assert.equal(value('list().main.length'),1);assert.equal(value('s.library.length'),4);});
+test('時間割切替は再生中のみ・HDMIで一時停止',()=>{run("s.lists.push({id:'night',name:'夜',main:[{...samples[1]}],touch:[]});s.schedule=[{id:'a',minutes:420,pid:'p1'},{id:'b',minutes:1020,pid:'night'}];simTime=600;startPlay(true)");assert.equal(value('playId'),'p1');run('simTime=1080');intervals[0]();assert.equal(value('playId'),'night');run("action('hdmi')");assert.equal(value('s.paused'),true);run('simTime=600');intervals[0]();assert.equal(value('page'),'hdmi');});
+test('再起動後も手動HDMI状態を維持',()=>{run('power();power()');timers.at(-1)();assert.equal(value('page'),'hdmi');assert.equal(value('s.paused'),true);});
+test('スケジュールへ明示的に戻る',()=>{run("backKey();action('schedule-play')");assert.equal(value('s.paused'),false);assert.equal(value('playId'),'p1');});
+test('保存した設定はJSONとして再読込できる',()=>{const saved=JSON.parse(storage.get('panely-experience-070a-v1'));assert.equal(saved.schedule.length,2);assert.equal(saved.lists.length,2);});
+console.log(`${count} flow tests passed (offline state only)`);
