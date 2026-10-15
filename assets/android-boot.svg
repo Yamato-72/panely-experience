@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 322 82" role="img" aria-label="android">
-  <g fill="none" stroke="#8ac9e4" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="none" stroke="#ffffff" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="27" cy="49" r="19"/><path d="M46 30V68"/>
     <path d="M60 68V31M60 48C60 24 97 24 97 48V68"/>
     <circle cx="129" cy="49" r="19"/><path d="M148 13V68"/>
@@ -9,3 +9,4 @@
     <circle cx="280" cy="49" r="19"/><path d="M299 13V68"/>
   </g>
 </svg>
+
