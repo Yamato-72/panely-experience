@@ -3,7 +3,7 @@
   const intro=document.createElement('dialog');
   intro.id='tour-intro';
   intro.setAttribute('aria-labelledby','tour-intro-title');
-  intro.innerHTML='<small>操作ガイド</small><h2 id="tour-intro-title">電源を入れて、映像を映してみましょう。</h2><p>これから、押す場所をひとつずつご案内します。<br>明るくなったボタンを押すと、次の案内へ進みます。</p><p class="tour-intro-route">電源を入れる → USBを挿す → 写真・動画を再生</p><button class="primary" id="tour-begin">ガイドをはじめる →</button><button class="tour-skip" id="tour-without-guide">案内なしで自由に操作する</button>';
+  intro.innerHTML='<small>操作ガイド</small><h2 id="tour-intro-title">電源を入れて、映像を映してみましょう。</h2><p>これから、押す場所をひとつずつご案内します。<br>明るくなったボタンを押すと、次の案内へ進みます。</p><p class="tour-intro-route">画面上で体験：電源ON → USB接続 → 写真・動画の再生</p><button class="primary" id="tour-begin">ガイドをはじめる →</button><button class="tour-skip" id="tour-without-guide">案内なしで自由に操作する</button>';
   document.body.append(intro);
   let introduced=false;
   const overlay=document.createElement('div');
@@ -19,7 +19,7 @@
     if(page==='welcome')return [b('go:choice'),'PANELYが起動しました。「はじめる」を押しましょう。'];
     if(page==='choice')return [b('choose:content'),'まずはUSBで写真・動画を映してみましょう。「写真・動画」を押してください。'];
     if(page==='usb'){
-      if(!usb)return ['#usb','サンプルのUSBを挿してみましょう。'];
+      if(!usb)return ['#usb','画面の「USBを挿す」ボタンを押してください。サンプル素材を使って、USBをつなぐ操作を体験できます。実物のUSBメモリは必要ありません。'];
       if(!permission)return [b('permission'),'写真や動画を読み込むため、「アクセスを許可する」を押しましょう。'];
       return [b('import'),'「USBを再確認する」で、素材を取り込みましょう。'];
     }
