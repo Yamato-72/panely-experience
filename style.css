@@ -133,3 +133,9 @@ footer{margin:16px 0;font-size:10px}
 #screen .feature-question{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;padding:0;margin:4px 6px;border:1px solid #b6b3be;border-radius:50%;background:#fff;color:#585361;font-size:14px;vertical-align:middle;box-shadow:none}
 #screen .feature-question:hover,#screen .feature-question:focus-visible{background:#17151f;color:white;outline:2px solid #bb4551;outline-offset:2px}
 #feature-help{width:min(440px,calc(100vw - 32px));padding:26px;border:1px solid var(--line);border-radius:16px}#feature-help h2{font-size:20px}#feature-help p{font-size:15px;line-height:1.9}
+/* First show the complete screen, then gently draw attention to the next action. */
+#tutorial:not([hidden]) .tour-hole{animation:tour-focus-in .55s ease-out both}
+#tutorial:not([hidden]) .tour-card{animation:tour-note-in .3s .25s ease-out both}
+@keyframes tour-focus-in{from{box-shadow:0 0 0 9999px #080b1600;border-color:transparent}35%{border-color:#fff;box-shadow:0 0 0 9999px #080b1630}to{box-shadow:0 0 0 9999px #080b16a8;border-color:#fff}}
+@keyframes tour-note-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#tutorial:not([hidden]) .tour-hole,#tutorial:not([hidden]) .tour-card{animation:none}.tour-hole{box-shadow:0 0 0 9999px #080b16a8}}

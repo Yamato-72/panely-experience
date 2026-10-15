@@ -11,7 +11,7 @@
   overlay.innerHTML='<div class="tour-hole"></div><section class="tour-card" aria-label="操作の案内"><small>操作ガイド</small><p aria-live="polite"></p><button class="tour-finish" hidden>自由に操作してみる →</button><button class="tour-skip">案内をスキップ</button></section>';
   document.body.append(overlay);
   const hole=overlay.querySelector('.tour-hole'),card=overlay.querySelector('.tour-card'),text=card.querySelector('p'),finish=card.querySelector('.tour-finish');
-  let dismissed=false,target=null,stepKey='',frame=0;
+  let dismissed=false,target=null,stepKey='',frame=0,revealTimer=null,revealReady=false;
   let editDone=false,editPhase="add";
   let playbackSeen=false,unplugSeen=false;
   const observation=document.createElement('section');
@@ -81,7 +81,7 @@
     }
     return null;
   }
-  function hide(){overlay.hidden=true;target=null;stepKey='';}
+  function hide(){clearTimeout(revealTimer);revealTimer=null;revealReady=false;overlay.hidden=true;target=null;stepKey='';}
   function update(){
     frame=0;installHelp();
     const observing=introduced&&guide&&!dismissed&&page==='play'&&!intro.open&&!completion.open&&!sampleDialog.open&&!$('#info').open&&!$('#hdmi-picker').open&&!$('.dialog-shade')&&!featureDialog.open&&(editDone||!playbackSeen||(!usb&&!unplugSeen));
@@ -96,7 +96,14 @@
     const next=step();if(!next){hide();return;}
     const el=document.querySelector(next[0]);if(!el){hide();return;}
     const key=next[0]+next[1];
-    if(key!==stepKey){stepKey=key;text.textContent=next[1];finish.hidden=!next[2];el.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});}
+    if(key!==stepKey){
+      // Let users see the result and its surroundings before directing attention.
+      clearTimeout(revealTimer);stepKey=key;revealReady=false;overlay.hidden=true;target=null;
+      text.textContent=next[1];finish.hidden=!next[2];
+      el.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+      revealTimer=setTimeout(()=>{revealReady=true;revealTimer=null;refresh();},1800);
+    }
+    if(!revealReady)return;
     target=el;overlay.hidden=false;lastActivity=Date.now();
     const r=el.getBoundingClientRect(),pad=7,w=window.innerWidth,h=window.innerHeight;
     const left=Math.max(4,r.left-pad),top=Math.max(4,r.top-pad),right=Math.min(w-4,r.right+pad),bottom=Math.min(h-4,r.bottom+pad);
