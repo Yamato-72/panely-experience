@@ -13,6 +13,14 @@
   const hole=overlay.querySelector('.tour-hole'),card=overlay.querySelector('.tour-card'),text=card.querySelector('p'),finish=card.querySelector('.tour-finish');
   let dismissed=false,target=null,stepKey='',frame=0;
   let editIndex=0,editDone=false;
+  let playbackSeen=false,unplugSeen=false;
+  const observation=document.createElement('section');
+  observation.className='tour-observation';observation.hidden=true;
+  observation.setAttribute('aria-label','再生の確認');
+  observation.innerHTML='<strong></strong><p></p><button class="primary">次へ →</button><button class="tour-skip">案内をスキップ</button>';
+  $('#guide').before(observation);
+  observation.querySelector('.primary').onclick=()=>{if(!playbackSeen)playbackSeen=true;else unplugSeen=true;refresh();};
+  observation.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
   const nextButton=document.createElement('button');nextButton.textContent='次へ →';nextButton.hidden=true;card.insertBefore(nextButton,finish);
   const help=document.createElement('details');help.className='management-help';
   help.innerHTML='<summary>編集画面の説明を読む</summary><p>各項目の「？」から説明を確認できます。</p>'+managementHelp.map((x,i)=>'<button data-help="'+i+'">？ '+x[1]+'</button>').join('');
@@ -47,6 +55,7 @@
     if(page==='pick')return picked.length?[b('add-picked'),'素材を選べました。「この内容ではじめる」を押しましょう。'] : ['#screen .grid .tile','まずは、このサンプル画像を選んでみましょう。'];
     if(page==='done')return [b('play'),'準備ができました。「再生をはじめる」を押しましょう。'];
     if(page==='play'&&!editDone){
+      if(!playbackSeen||(!usb&&!unplugSeen))return null;
       if(usb)return ['#usb','再生できました！素材は本体に保存されています。画面の「USBを抜く」を押して、再生が続くことを確認しましょう。'];
       return ['.remote-back','USBを抜いても再生が続きます。次に、リモコンの「戻る」を押して編集画面を開きましょう。'];
     }
@@ -59,7 +68,17 @@
   }
   function hide(){overlay.hidden=true;target=null;stepKey='';}
   function update(){
-    frame=0;help.hidden=page!=='manage';const next=step();nextButton.hidden=next?.[3]!=='explain';if(!next){hide();return;}
+    frame=0;help.hidden=page!=='manage';
+    const observing=introduced&&guide&&!dismissed&&!editDone&&page==='play'&&!intro.open&&!completion.open&&!sampleDialog.open&&!$('#info').open&&!$('#hdmi-picker').open&&!$('.dialog-shade')&&(!playbackSeen||(!usb&&!unplugSeen));
+    const wasObserving=!observation.hidden;
+    observation.hidden=!observing;
+    if(observing){
+      observation.querySelector('strong').textContent=!playbackSeen?'写真・動画が再生できました。':'USBを抜いても、再生が続いています。';
+      observation.querySelector('p').textContent=!playbackSeen?'まずは、ディスプレイに映った内容をご覧ください。確認できたら、次へ進んでUSBを抜く操作を試しましょう。':'取り込んだ素材は本体に保存されています。表示を確認できたら、編集画面への戻り方に進みましょう。';
+      observation.querySelector('.primary').textContent=!playbackSeen?'確認できたので、次へ →':'編集画面への戻り方を見る →';
+      if(!wasObserving)$('#screen').scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+    }
+    const next=step();nextButton.hidden=next?.[3]!=='explain';if(!next){hide();return;}
     const el=document.querySelector(next[0]);if(!el){hide();return;}
     const key=next[0]+next[1];
     if(key!==stepKey){stepKey=key;text.textContent=next[1];finish.hidden=!next[2];el.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});}
@@ -83,7 +102,7 @@
     if(!overlay.hidden&&!nextButton.hidden&&target?.contains(e.target)){e.preventDefault();e.stopImmediatePropagation();return;}
     if(!overlay.hidden&&!overlay.contains(e.target)&&!target?.contains(e.target)&&!e.target.closest('#free,#guided,#reset')){e.preventDefault();e.stopImmediatePropagation();return;}
     if(e.target.closest('#guided,#reset'))dismissed=false;
-    if(e.target.closest('#reset')){editIndex=0;editDone=false;}
+    if(e.target.closest('#reset')){editIndex=0;editDone=false;playbackSeen=false;unplugSeen=false;}
     if(e.target.closest('#guided')&&page==='manage'){editIndex=0;editDone=false;}
     refresh();
   },true);
@@ -92,6 +111,7 @@
   },true);
   document.addEventListener('keydown',e=>{
     if(intro.open||completion.open||sampleDialog.open){e.stopImmediatePropagation();return;}
+    if(!observation.hidden&&observation.contains(e.target)){e.stopImmediatePropagation();return;}
     if(overlay.hidden)return;
     if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();$('#free').click();end();return;}
     if(e.key==='Tab'){
