@@ -47,7 +47,7 @@
   sampleDialog.addEventListener('click',e=>{const p=e.target.closest('[data-period]');if(p)$('#period-example').textContent=p.dataset.period==='昼'?'12:00〜 ランチメニューを表示':'17:00〜 ディナーメニューを表示';});
   completion.addEventListener('click',e=>{const option=e.target.closest('[data-explore]');if(!option)return;completion.close();$('#free').click();end();
     if(option.dataset.explore==='edit'){go('manage');toast('素材を選ぶと順番や表示時間を変更できます。「＋ふやす」で素材を追加できます。');}
-    if(option.dataset.explore==='hdmi')$('#hdmi-picker').showModal();
+    if(option.dataset.explore==='hdmi')connectSource('pc');
     if(option.dataset.explore==='schedule')sampleDialog.showModal();
   });
 
