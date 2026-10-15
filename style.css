@@ -155,3 +155,5 @@ footer{margin:16px 0;font-size:10px}
 .completion-footer{border-top:1px solid #e8e5e9;margin-top:22px;padding-top:20px;text-align:center}.completion-footer button{padding:12px 30px;min-height:46px;background:#17151f;color:white;border-radius:10px;font-size:14px;font-weight:600}.completion-footer button span{margin-left:24px}.completion-footer>small{display:block;margin-top:12px;font-size:11px;color:#77717f;line-height:1.7}
 @media(max-width:540px){#tour-complete{padding:22px 18px}.completion-heading{margin-bottom:18px}#tour-complete h2{font-size:20px}#tour-complete .completion-options{grid-template-columns:1fr}#tour-complete .completion-options button{min-height:72px;padding:12px 14px}.completion-footer{margin-top:18px;padding-top:16px}.completion-footer button{width:100%}}
 @media(prefers-reduced-motion:reduce){#tour-complete .completion-options button{transition:none}}
+#tour-complete .completion-options{grid-template-columns:1fr}
+#tour-complete .completion-options button{min-height:76px;padding:14px 18px}

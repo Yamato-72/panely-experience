@@ -40,7 +40,6 @@
     ['edit','映す内容を変更する','素材の追加・順番の変更','<path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="white"/><circle cx="15" cy="12" r="2" fill="white"/><circle cx="9" cy="17" r="2" fill="white"/>'],
     ['hdmi','PC・STBの画面を映す','HDMIで映像を表示','<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'],
     ['remote','リモコンで操作する','方向キーで選択・OKで決定','<rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M10 17h4M11 5h2"/>'],
-    ['schedule','時間割を知る','時間帯で映す内容を切り替え','<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>']
   ];
   completion.innerHTML='<div class="completion-heading"><span class="completion-check" aria-hidden="true">✓</span><span class="completion-eyebrow">基本の操作を体験しました</span><h2 tabindex="-1" autofocus>映す・変更する、ができました。</h2><p>気になる使い方を、続けて試してみましょう。</p></div><div class="tour-options completion-options">'+exploreChoices.map(([id,title,description,paths])=>'<button data-explore="'+id+'"><span class="explore-icon">'+exploreIcon(paths)+'</span><span class="explore-copy"><strong>'+title+'</strong><small>'+description+'</small></span><span class="explore-arrow" aria-hidden="true">→</span></button>').join('')+'</div><div class="completion-footer"><button data-explore="free">自由に試す <span aria-hidden="true">→</span></button><small>各機能の説明は、編集画面の「？」から確認できます。</small></div>';
   document.body.append(completion);
