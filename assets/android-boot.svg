@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 322 82" role="img" aria-label="android">
+  <g fill="none" stroke="#8ac9e4" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="27" cy="49" r="19"/><path d="M46 30V68"/>
+    <path d="M60 68V31M60 48C60 24 97 24 97 48V68"/>
+    <circle cx="129" cy="49" r="19"/><path d="M148 13V68"/>
+    <path d="M163 68V31M163 47C163 34 172 29 184 31"/>
+    <circle cx="211" cy="49" r="19"/>
+    <path d="M246 31V68M246 15V16"/>
+    <circle cx="280" cy="49" r="19"/><path d="M299 13V68"/>
+  </g>
+</svg>

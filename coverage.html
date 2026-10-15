@@ -11,6 +11,7 @@
 <tr><td>外部アプリ</td><td>固定サンプルの追加確認・起動・戻り。実機のインストーラー画面と各アプリの動作は未再現。</td><td>SetupWizardActivity / ExternalAppHostActivity</td></tr>
 <tr><td>操作音・焼き付き防止・PIN変更・初期化</td><td>設定保存・再起動体験に反映。取込完了音は元ソースの音源、全操作の音・モーションは未再現。</td><td>ManageActivity / Sfx / ViewerActivity</td></tr>
 <tr><td>管理画面の待機時計</td><td>60秒無操作で表示、操作で復帰。</td><td>ManageActivity</td></tr>
-<tr><td>電源・ホーム運用</td><td>電源ON/OFFと保存した設定での再開を疑似再現。メーカー起動ロゴ・OS起動・ホーム選択・自動復旧・実機の起動時間は未再現。</td><td>BootReceiver / StartupLaunchGuard（実機確認が必要）</td></tr>
+<tr><td>電源・ホーム運用</td><td>電源ON/OFFと保存した設定での再開を疑似再現。起動時の水色androidロゴは提供された実機写真を参考に再現（約3秒）。OS起動・ホーム選択・自動復旧・実機の起動時間は未再現。</td><td>BootReceiver / StartupLaunchGuard（実機確認が必要）</td></tr>
 <tr><td>Android / ToolBox / 保守画面</td><td>Wi-Fiは仮画面。他のOS・メーカー設定と隠し保守メニューは未再現。</td><td>対象機種の資料・実機が必要</td></tr>
 </tbody></table><h2>完全再現に向けて必要な確認</h2><ol><li>対象ディスプレイの型番、縦横、タッチ対応、リモコン、端子位置。</li><li>0.70aを搭載した実機の初回起動と設定済み起動の画面。</li><li>各画面・ダイアログ・異常系をこの試作と並べて照合。</li><li>Android設定・ToolBox・外部アプリの範囲を確定し、画面と操作を追加。</li><li>社内検証後に、導入前のお客様向け公開版として表示を確定。</li></ol><p>Androidソース本体、社内資料、保守用コードは公開用フォルダへ同梱していません。</p></article></html>
+
