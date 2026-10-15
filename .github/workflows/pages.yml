@@ -26,10 +26,7 @@ jobs:
           node tests/flows.test.cjs
       - uses: actions/configure-pages@v5
       - name: Prepare public files
-        run: |
-          mkdir public
-          cp index.html style.css core.js app.js coverage.html public/
-          cp -r assets public/
+        run: node build.cjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
