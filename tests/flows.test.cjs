@@ -19,4 +19,5 @@ test('時間割切替は再生中のみ・HDMIで一時停止',()=>{run("s.lists
 test('再起動後も手動HDMI状態を維持',()=>{run('power();power()');timers.at(-1)();assert.equal(value('page'),'hdmi');assert.equal(value('s.paused'),true);});
 test('スケジュールへ明示的に戻る',()=>{run("backKey();action('schedule-play')");assert.equal(value('s.paused'),false);assert.equal(value('playId'),'p1');});
 test('保存した設定はJSONとして再読込できる',()=>{const saved=JSON.parse(storage.get('panely-experience-070a-v1'));assert.equal(saved.schedule.length,2);assert.equal(saved.lists.length,2);});
+test('リモコン電源でOFFから起動でき、起動中の方向キーで遷移しない',()=>{run("powered=false;go('off');remote('power')");assert.equal(value('powered'),true);assert.equal(value('page'),'boot');run("remote('ArrowUp')");assert.equal(value('page'),'boot');run("remote('power')");assert.equal(value('page'),'off');});
 console.log(`${count} flow tests passed (offline state only)`);

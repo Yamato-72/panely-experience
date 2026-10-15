@@ -5,3 +5,23 @@
 
 
 
+/* Supplied remote: photo-based proportions and button placement. */
+.remote-body{position:relative;width:148px;height:570px;margin:22px auto 25px;padding:36px 15px 0;border-radius:48% 48% 44% 44% / 1.1% 1.1% 1% 1%;background:radial-gradient(ellipse at 40% 10%,#ffffff0b,transparent 58%),repeating-linear-gradient(108deg,#ffffff03 0,#ffffff03 1px,transparent 1px,transparent 3px),linear-gradient(95deg,#212326,#303236 40%,#27292c 85%,#17191c);border:1px solid #3b3d40;box-shadow:inset 1px 0 2px #ffffff15,inset -2px 0 3px #0008,4px 13px 18px #17151f24}
+.remote-top-row{display:flex;justify-content:space-between;padding:0 4px}
+.remote .remote-key{width:36px;height:36px;min-width:0;padding:8px;border:1.5px solid #111315;border-radius:50%;color:#e3e5e5;background:linear-gradient(130deg,#373a3d,#212326);box-shadow:0 2px 3px #0009,inset 0 1px 1px #ffffff15;display:flex;align-items:center;justify-content:center}
+.remote .remote-key svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.remote .remote-key:disabled{opacity:1;cursor:default;color:#c5c8c8}
+.remote .remote-key:hover:not(:disabled){background:linear-gradient(130deg,#484c50,#303337)}
+.remote .remote-key.remote-power{background:linear-gradient(135deg,#ee6564,#d84d4d);border-color:#b13e3e;color:#fff2f0;box-shadow:0 2px 3px #0008,inset 0 1px 2px #ffb0a480}
+.remote .remote-key.remote-power:hover{background:#f07570}
+.remote-dpad{position:relative;width:120px;height:120px;border-radius:50%;margin:12px -2px 14px;background:linear-gradient(140deg,#35383c,#222427);border:1.5px solid #0f1113;box-shadow:0 2px 3px #0008,inset 0 1px 1px #ffffff12}
+.remote .remote-arrow{position:absolute;width:38px;height:34px;border:0;border-radius:12px;padding:0;background:transparent;color:#e1e5e5;box-shadow:none;font-size:16px;line-height:1;text-shadow:0 1px 2px #000}
+.remote .remote-arrow:hover{background:#ffffff10}
+.remote-up{left:40px;top:0}.remote-down{left:40px;bottom:0}.remote-left{left:0;top:42px}.remote-right{right:0;top:42px}
+.remote .remote-ok{position:absolute;left:32px;top:32px;width:54px;height:54px;border-radius:50%;padding:0;font:19px Arial,sans-serif;color:#e2e5e5;background:linear-gradient(145deg,#33363a,#242629);border:2px solid #101214;box-shadow:0 1px 2px #0009,inset 0 1px 2px #ffffff12}
+.remote .remote-ok:hover{background:#3c4044}
+.remote-functions{position:relative;height:120px;margin:0 4px}
+.remote-functions .remote-key{position:absolute}.remote-menu{left:0;top:0}.remote-back{right:0;top:0}.remote-mouse{left:calc(50% - 18px);top:37px}.remote-volume-down{left:0;top:76px}.remote-volume-up{right:0;top:76px}
+.remote .remote-note{font-size:10px;color:var(--muted);margin-top:12px}.remote-note p{margin-top:8px}
+@media(max-width:760px){.remote{padding:14px 8px}.remote-head{justify-content:center}.remote-head span+span{display:none}.remote-body{width:142px;height:548px;padding-left:12px;padding-right:12px}.remote>p,.remote-note{padding:0 5px}}
+@media(max-width:420px){.experience aside{grid-template-columns:minmax(0,1fr)}.remote-head{justify-content:space-between;padding:0 10px}.remote-head span+span{display:inline}}
