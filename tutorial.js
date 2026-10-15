@@ -128,8 +128,8 @@
   function refresh(){if(!frame)frame=requestAnimationFrame(update);}
   function end(){dismissed=true;hide();}
   card.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
-  finish.textContent='次に試すことを選ぶ →';
-  finish.onclick=()=>{remoteOutro=false;$('#free').click();end();completion.showModal();};
+  finish.textContent='自由に操作する →';
+  finish.onclick=()=>{remoteOutro=false;$('#free').click();end();};
   // Restrict interaction to the highlighted control, with an always available exit.
   document.addEventListener('click',e=>{
     const question=e.target.closest('[data-feature-help]');
