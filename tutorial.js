@@ -17,7 +17,7 @@
   const observation=document.createElement('section');
   observation.className='tour-observation';observation.hidden=true;
   observation.setAttribute('aria-label','再生の確認');
-  observation.innerHTML='<div class="observation-copy"><small>操作ガイドは続きます</small><strong></strong><p></p></div><div class="observation-actions"><button class="primary">次へ →</button><button class="tour-skip">ここで案内を終える</button></div>';
+  observation.innerHTML='<div class="observation-copy"><small>操作ガイドは続きます</small><strong></strong><p></p></div><div class="observation-actions"><button class="primary">次へ →</button><button class="tour-skip">自由に操作する</button></div>';
   $('.display-wrap').after(observation);
   observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;remoteOutro=true;}else playbackSeen=true;refresh();};
   observation.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
@@ -59,7 +59,7 @@
       if(editPhase==='duration'&&$('#duration'))return ['.screen-dialog','表示時間を「5秒」に選び直して、「保存する」を押してください。次の再生で、素材が切り替わる様子を確認できます。'];
       return null;
     }
-    if(remoteOutro)return ['.remote-body','リモコンでも操作できます。方向キーで項目を選び、OKで決定します。「戻る」で編集画面に戻れます。案内を終えたら、自由に試してみてください。',true];
+    if(remoteOutro)return ['.remote-body','画面のボタンに加えて、リモコンでも操作できます。方向キーで項目を選び、OKで決定します。「戻る」で編集画面に戻れます。',true];
     if(page==='off')return ['#power','まずは、電源を入れてみましょう。明るくなっているボタンを押してください。'];
     if(page==='welcome')return [b('go:choice'),'PANELYが起動しました。「はじめる」を押しましょう。'];
     if(page==='choice')return [b('choose:content'),'まずはUSBで写真・動画を映してみましょう。「写真・動画」を押してください。'];
@@ -97,9 +97,10 @@
     const wasObserving=!observation.hidden;
     observation.hidden=!observing;
     if(observing){
+      observation.querySelector('.observation-copy small').textContent=editDone?'基本の操作ができました':'再生を確認しましょう';
       observation.querySelector('strong').textContent=editDone?'変更した内容が再生できました。':'再生できました。次は映す内容を変更してみましょう。';
       observation.querySelector('p').textContent=editDone?'先ほどの素材が5秒で切り替わることと、変更した順番をご確認ください。これで基本の操作は完了です。':'映った内容を確認したら、下のボタンで編集画面への戻り方に進めます。';
-      observation.querySelector('.primary').textContent=editDone?'確認できた：最後の案内へ →':'次へ：編集画面に戻る →';
+      observation.querySelector('.primary').textContent=editDone?'リモコンの使い方を見る →':'次へ：編集画面に戻る →';
       if(!wasObserving)observation.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     }
     const next=step();if(!next){hide();return;}
@@ -127,7 +128,7 @@
   function refresh(){if(!frame)frame=requestAnimationFrame(update);}
   function end(){dismissed=true;hide();}
   card.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
-  finish.textContent='案内を終える →';
+  finish.textContent='次に試すことを選ぶ →';
   finish.onclick=()=>{remoteOutro=false;$('#free').click();end();completion.showModal();};
   // Restrict interaction to the highlighted control, with an always available exit.
   document.addEventListener('click',e=>{
