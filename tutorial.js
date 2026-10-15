@@ -13,13 +13,13 @@
   const hole=overlay.querySelector('.tour-hole'),card=overlay.querySelector('.tour-card'),text=card.querySelector('p'),finish=card.querySelector('.tour-finish');
   let dismissed=false,target=null,stepKey='',frame=0,revealTimer=null,revealReady=false;
   let editDone=false,editPhase="add";
-  let playbackSeen=false,unplugSeen=false;
+  let playbackSeen=false;
   const observation=document.createElement('section');
   observation.className='tour-observation';observation.hidden=true;
   observation.setAttribute('aria-label','再生の確認');
   observation.innerHTML='<div class="observation-copy"><small>操作ガイドは続きます</small><strong></strong><p></p></div><div class="observation-actions"><button class="primary">次へ →</button><button class="tour-skip">ここで案内を終える</button></div>';
   $('.display-wrap').after(observation);
-  observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;completion.showModal();}else if(!playbackSeen)playbackSeen=true;else unplugSeen=true;refresh();};
+  observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;completion.showModal();}else playbackSeen=true;refresh();};
   observation.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
 
   const featureDialog=document.createElement('dialog');featureDialog.id='feature-help';featureDialog.setAttribute('aria-labelledby','feature-title');
@@ -60,12 +60,11 @@
       return [b('import'),'「USBを再確認する」で、素材を取り込みましょう。'];
     }
     if(page==='permission')return permission?[b('permission-back'),'許可できました。「PANELYへ戻る」を押しましょう。']:[b('grant'),'PANELYのファイルアクセスを「ON」にしましょう。'];
-    if(page==='pick')return picked.length?[b('add-picked'),'素材を選べました。「この内容ではじめる」を押しましょう。'] : ['#screen .grid .tile','まずは、このサンプル画像を選んでみましょう。'];
+    if(page==='pick')return picked.length?[b('add-picked'),'素材を選べました。「この内容ではじめる」を押しましょう。'] : ['#screen .grid .tile','取り込みが完了しました。素材は本体に保存されたので、USBメモリは抜いてかまいません。まずは、このサンプル画像を選んでみましょう。'];
     if(page==='done')return [b('play'),'準備ができました。「再生をはじめる」を押しましょう。'];
     if(page==='play'&&!editDone){
-      if(!playbackSeen||(!usb&&!unplugSeen))return null;
-      if(usb)return ['#usb','再生できました！素材は本体に保存されています。画面の「USBを抜く」を押して、再生が続くことを確認しましょう。'];
-      return ['.remote-back','USBを抜いても再生が続きます。次に、リモコンの「戻る」を押して編集画面を開きましょう。'];
+      if(!playbackSeen)return null;
+      return ['.remote-back','映す内容を変更してみましょう。リモコンの「戻る」を押して編集画面を開きましょう。'];
     }
     if(page==='manage'&&!editDone){
       if(tab!=='main')return [b('tab:main'),'「いつもの」を選び、普段流す内容を編集しましょう。'];
@@ -84,13 +83,13 @@
   function hide(){clearTimeout(revealTimer);revealTimer=null;revealReady=false;overlay.hidden=true;target=null;stepKey='';}
   function update(){
     frame=0;installHelp();
-    const observing=introduced&&guide&&!dismissed&&page==='play'&&!intro.open&&!completion.open&&!sampleDialog.open&&!$('#info').open&&!$('#hdmi-picker').open&&!$('.dialog-shade')&&!featureDialog.open&&(editDone||!playbackSeen||(!usb&&!unplugSeen));
+    const observing=introduced&&guide&&!dismissed&&page==='play'&&!intro.open&&!completion.open&&!sampleDialog.open&&!$('#info').open&&!$('#hdmi-picker').open&&!$('.dialog-shade')&&!featureDialog.open&&(editDone||!playbackSeen);
     const wasObserving=!observation.hidden;
     observation.hidden=!observing;
     if(observing){
-      observation.querySelector('strong').textContent=editDone?'変更した内容が再生できました。':!playbackSeen?'再生できました。次はUSBを抜いてみましょう。':'再生は続いています。次は編集画面に戻ってみましょう。';
-      observation.querySelector('p').textContent=editDone?'追加した素材と、変更した順番を確認してください。これで基本の操作は完了です。':!playbackSeen?'映った内容を確認したら、下のボタンで案内を進めてください。':'素材が本体に保存されていることを確認できました。下のボタンで操作を続けられます。';
-      observation.querySelector('.primary').textContent=editDone?'確認できた：次の体験を選ぶ →':!playbackSeen?'次へ：USBを抜く体験 →':'次へ：編集画面に戻る →';
+      observation.querySelector('strong').textContent=editDone?'変更した内容が再生できました。':'再生できました。次は映す内容を変更してみましょう。';
+      observation.querySelector('p').textContent=editDone?'追加した素材と、変更した順番を確認してください。これで基本の操作は完了です。':'映った内容を確認したら、下のボタンで編集画面への戻り方に進めます。';
+      observation.querySelector('.primary').textContent=editDone?'確認できた：次の体験を選ぶ →':'次へ：編集画面に戻る →';
       if(!wasObserving)observation.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     }
     const next=step();if(!next){hide();return;}
@@ -126,7 +125,7 @@
 
     if(!overlay.hidden&&!overlay.contains(e.target)&&!target?.contains(e.target)&&!e.target.closest('#free,#guided,#reset,[data-feature-help]')){e.preventDefault();e.stopImmediatePropagation();return;}
     if(e.target.closest('#guided,#reset'))dismissed=false;
-    if(e.target.closest('#reset')){editDone=false;editPhase="add";playbackSeen=false;unplugSeen=false;}
+    if(e.target.closest('#reset')){editDone=false;editPhase="add";playbackSeen=false;}
     if(e.target.closest('#guided')&&page==='manage'){editDone=false;editPhase='add';}
     const actionName=e.target.closest('[data-action]')?.dataset.action;
     if(guide&&!dismissed&&!editDone){

@@ -1,17 +1,14 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../tutorial.js'),'utf8');
 const step=source.slice(source.indexOf('  function step(){'),source.indexOf('  function hide(){'));
-const context=vm.createContext({introduced:true,intro:{open:false},completion:{open:false},sampleDialog:{open:false},featureDialog:{open:false},guide:true,dismissed:false,page:'play',editDone:false,playbackSeen:false,unplugSeen:false,usb:true,$:q=>q==='.dialog-shade'?null:{hidden:true,open:false}});
+const context=vm.createContext({introduced:true,intro:{open:false},completion:{open:false},sampleDialog:{open:false},featureDialog:{open:false},guide:true,dismissed:false,page:'play',editDone:false,playbackSeen:false,usb:true,$:q=>q==='.dialog-shade'?null:{hidden:true,open:false}});
 vm.runInContext(step,context);
 assert.equal(vm.runInContext('step()',context),null,'Playback remains unobscured before confirmation');
 context.playbackSeen=true;
-assert.equal(vm.runInContext('step()[0]',context),'#usb','Confirmation enables USB prompt');
+assert.equal(vm.runInContext('step()[0]',context),'.remote-back','Playback confirmation goes directly to editing while USB remains connected');
 context.usb=false;
-assert.equal(vm.runInContext('step()',context),null,'Unplugged playback remains unobscured before confirmation');
-context.unplugSeen=true;
-assert.equal(vm.runInContext('step()[0]',context),'.remote-back','Only explicit confirmation enables return prompt');
-console.log('PASS playback and unplug confirmation gates');
-
+assert.equal(vm.runInContext('step()[0]',context),'.remote-back','Unplugging is optional and does not affect tutorial progression');
+console.log('PASS playback confirmation without unplug requirement');
 context.page='manage';context.tab='main';context.editPhase='add';context.b=a=>'#screen [data-action="'+a+'"]';context.list=()=>({main:[{id:'cafe'},{id:'sale'}]});
 assert.ok(vm.runInContext('step()[0]',context).includes('"add"'));
 context.editPhase='select';assert.ok(vm.runInContext('step()[0]',context).includes('edit:1'));
