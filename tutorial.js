@@ -12,14 +12,14 @@
   document.body.append(overlay);
   const hole=overlay.querySelector('.tour-hole'),card=overlay.querySelector('.tour-card'),text=card.querySelector('p'),finish=card.querySelector('.tour-finish');
   let dismissed=false,target=null,stepKey='',frame=0,revealTimer=null,revealReady=false;
-  let editDone=false,editPhase="add";
+  let editDone=false,editPhase="add",remoteOutro=false;
   let playbackSeen=false;
   const observation=document.createElement('section');
   observation.className='tour-observation';observation.hidden=true;
   observation.setAttribute('aria-label','再生の確認');
   observation.innerHTML='<div class="observation-copy"><small>操作ガイドは続きます</small><strong></strong><p></p></div><div class="observation-actions"><button class="primary">次へ →</button><button class="tour-skip">ここで案内を終える</button></div>';
   $('.display-wrap').after(observation);
-  observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;completion.showModal();}else playbackSeen=true;refresh();};
+  observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;remoteOutro=true;}else playbackSeen=true;refresh();};
   observation.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
 
   const featureDialog=document.createElement('dialog');featureDialog.id='feature-help';featureDialog.setAttribute('aria-labelledby','feature-title');
@@ -39,7 +39,6 @@
   const exploreChoices=[
     ['edit','映す内容を変更する','素材の追加・順番の変更','<path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="white"/><circle cx="15" cy="12" r="2" fill="white"/><circle cx="9" cy="17" r="2" fill="white"/>'],
     ['hdmi','PC・STBの画面を映す','HDMIで映像を表示','<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'],
-    ['remote','リモコンで操作する','方向キーで選択・OKで決定','<rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M10 17h4M11 5h2"/>'],
   ];
   completion.innerHTML='<div class="completion-heading"><span class="completion-check" aria-hidden="true">✓</span><span class="completion-eyebrow">基本の操作を体験しました</span><h2 tabindex="-1" autofocus>映す・変更する、ができました。</h2><p>気になる使い方を、続けて試してみましょう。</p></div><div class="tour-options completion-options">'+exploreChoices.map(([id,title,description,paths])=>'<button data-explore="'+id+'"><span class="explore-icon">'+exploreIcon(paths)+'</span><span class="explore-copy"><strong>'+title+'</strong><small>'+description+'</small></span><span class="explore-arrow" aria-hidden="true">→</span></button>').join('')+'</div><div class="completion-footer"><button data-explore="free">自由に試す <span aria-hidden="true">→</span></button><small>各機能の説明は、編集画面の「？」から確認できます。</small></div>';
   document.body.append(completion);
@@ -50,13 +49,13 @@
     if(option.dataset.explore==='edit'){go('manage');toast('素材を選ぶと順番や表示時間を変更できます。「＋ふやす」で素材を追加できます。');}
     if(option.dataset.explore==='hdmi')$('#hdmi-picker').showModal();
     if(option.dataset.explore==='schedule')sampleDialog.showModal();
-    if(option.dataset.explore==='remote'){go('manage');toast('リモコンの方向キーで項目を選び、OKで決定してください。');$('.remote').scrollIntoView({block:'center'});}
   });
 
   completion.addEventListener('cancel',()=>{$('#free').click();end();});
   const b=a=>'#screen [data-action="'+a+'"]';
   function step(){
     if(!introduced||intro.open||completion.open||sampleDialog.open||featureDialog.open||!guide||dismissed||!$('#entry-screen').hidden||$('#info').open||$('#hdmi-picker').open||$('.dialog-shade'))return null;
+    if(remoteOutro)return ['.remote-body','リモコンでも操作できます。方向キーで項目を選び、OKで決定します。「戻る」で編集画面に戻れます。案内を終えたら、自由に試してみてください。',true];
     if(page==='off')return ['#power','まずは、電源を入れてみましょう。明るくなっているボタンを押してください。'];
     if(page==='welcome')return [b('go:choice'),'PANELYが起動しました。「はじめる」を押しましょう。'];
     if(page==='choice')return [b('choose:content'),'まずはUSBで写真・動画を映してみましょう。「写真・動画」を押してください。'];
@@ -89,13 +88,13 @@
   function hide(){clearTimeout(revealTimer);revealTimer=null;revealReady=false;overlay.hidden=true;target=null;stepKey='';}
   function update(){
     frame=0;installHelp();
-    const observing=introduced&&guide&&!dismissed&&page==='play'&&!intro.open&&!completion.open&&!sampleDialog.open&&!$('#info').open&&!$('#hdmi-picker').open&&!$('.dialog-shade')&&!featureDialog.open&&(editDone||!playbackSeen);
+    const observing=!remoteOutro&&introduced&&guide&&!dismissed&&page==='play'&&!intro.open&&!completion.open&&!sampleDialog.open&&!$('#info').open&&!$('#hdmi-picker').open&&!$('.dialog-shade')&&!featureDialog.open&&(editDone||!playbackSeen);
     const wasObserving=!observation.hidden;
     observation.hidden=!observing;
     if(observing){
       observation.querySelector('strong').textContent=editDone?'変更した内容が再生できました。':'再生できました。次は映す内容を変更してみましょう。';
       observation.querySelector('p').textContent=editDone?'追加した素材と、変更した順番を確認してください。これで基本の操作は完了です。':'映った内容を確認したら、下のボタンで編集画面への戻り方に進めます。';
-      observation.querySelector('.primary').textContent=editDone?'確認できた：次の体験を選ぶ →':'次へ：編集画面に戻る →';
+      observation.querySelector('.primary').textContent=editDone?'確認できた：最後の案内へ →':'次へ：編集画面に戻る →';
       if(!wasObserving)observation.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     }
     const next=step();if(!next){hide();return;}
@@ -123,7 +122,8 @@
   function refresh(){if(!frame)frame=requestAnimationFrame(update);}
   function end(){dismissed=true;hide();}
   card.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
-  finish.onclick=()=>{$('#free').click();end();};
+  finish.textContent='案内を終える →';
+  finish.onclick=()=>{remoteOutro=false;$('#free').click();end();completion.showModal();};
   // Restrict interaction to the highlighted control, with an always available exit.
   document.addEventListener('click',e=>{
     const question=e.target.closest('[data-feature-help]');
@@ -131,7 +131,7 @@
 
     if(!overlay.hidden&&!overlay.contains(e.target)&&!target?.contains(e.target)&&!e.target.closest('#free,#guided,#reset,[data-feature-help]')){e.preventDefault();e.stopImmediatePropagation();return;}
     if(e.target.closest('#guided,#reset'))dismissed=false;
-    if(e.target.closest('#reset')){editDone=false;editPhase="add";playbackSeen=false;}
+    if(e.target.closest('#reset')){remoteOutro=false;editDone=false;editPhase="add";playbackSeen=false;}
     if(e.target.closest('#guided')&&page==='manage'){editDone=false;editPhase='add';}
     const actionName=e.target.closest('[data-action]')?.dataset.action;
     if(guide&&!dismissed&&!editDone){

@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../tutorial.js'),'utf8');
 const step=source.slice(source.indexOf('  function step(){'),source.indexOf('  function hide(){'));
-const context=vm.createContext({introduced:true,intro:{open:false},completion:{open:false},sampleDialog:{open:false},featureDialog:{open:false},guide:true,dismissed:false,page:'play',editDone:false,playbackSeen:false,usb:true,$:q=>q==='.dialog-shade'?null:{hidden:true,open:false}});
+const context=vm.createContext({introduced:true,remoteOutro:false,intro:{open:false},completion:{open:false},sampleDialog:{open:false},featureDialog:{open:false},guide:true,dismissed:false,page:'play',editDone:false,playbackSeen:false,usb:true,$:q=>q==='.dialog-shade'?null:{hidden:true,open:false}});
 vm.runInContext(step,context);
 assert.equal(vm.runInContext('step()',context),null,'Playback remains unobscured before confirmation');
 context.playbackSeen=true;
@@ -17,3 +17,5 @@ context.editPhase='replay';assert.ok(vm.runInContext('step()[0]',context).includ
 context.page='play';context.editDone=true;assert.equal(vm.runInContext('step()',context),null,'Edited playback is not obscured by a spotlight');
 context.featureDialog.open=true;assert.equal(vm.runInContext('step()',context),null,'Help pauses the spotlight');
 console.log('PASS guided editing and optional help');
+
+context.featureDialog.open=false;context.remoteOutro=true;assert.equal(vm.runInContext("step()[0]",context),".remote-body");console.log("PASS final remote introduction");
