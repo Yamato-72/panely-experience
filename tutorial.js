@@ -1,5 +1,11 @@
 /* Guided overlay follows real simulator actions; it never advances the app itself. */
 (() => {
+  const intro=document.createElement('dialog');
+  intro.id='tour-intro';
+  intro.setAttribute('aria-labelledby','tour-intro-title');
+  intro.innerHTML='<small>操作ガイド</small><h2 id="tour-intro-title">電源を入れて、映像を映してみましょう。</h2><p>これから、押す場所をひとつずつご案内します。<br>明るくなったボタンを押すと、次の案内へ進みます。</p><p class="tour-intro-route">電源を入れる → USBを挿す → 写真・動画を再生</p><button class="primary" id="tour-begin">ガイドをはじめる →</button><button class="tour-skip" id="tour-without-guide">案内なしで自由に操作する</button>';
+  document.body.append(intro);
+  let introduced=false;
   const overlay=document.createElement('div');
   overlay.id='tutorial';overlay.hidden=true;
   overlay.innerHTML='<div class="tour-hole"></div><section class="tour-card" aria-label="操作の案内"><small>操作ガイド</small><p aria-live="polite"></p><button class="tour-finish" hidden>自由に操作してみる →</button><button class="tour-skip">案内をスキップ</button></section>';
@@ -8,7 +14,7 @@
   let dismissed=false,target=null,stepKey='',frame=0;
   const b=a=>'#screen [data-action="'+a+'"]';
   function step(){
-    if(!guide||dismissed||!$('#entry-screen').hidden||$('#info').open||$('#hdmi-picker').open||$('.dialog-shade'))return null;
+    if(!introduced||intro.open||!guide||dismissed||!$('#entry-screen').hidden||$('#info').open||$('#hdmi-picker').open||$('.dialog-shade'))return null;
     if(page==='off')return ['#power','まずは、電源を入れてみましょう。明るくなっているボタンを押してください。'];
     if(page==='welcome')return [b('go:choice'),'PANELYが起動しました。「はじめる」を押しましょう。'];
     if(page==='choice')return [b('choose:content'),'まずはUSBで写真・動画を映してみましょう。「写真・動画」を押してください。'];
@@ -54,6 +60,7 @@
     if(!overlay.hidden&&!overlay.contains(e.target)&&!target?.contains(e.target)&&!e.target.closest('#free,#guided,#reset')){e.preventDefault();e.stopImmediatePropagation();}
   },true);
   document.addEventListener('keydown',e=>{
+    if(intro.open){e.stopImmediatePropagation();return;}
     if(overlay.hidden)return;
     if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();$('#free').click();end();return;}
     if(e.key==='Tab'){
@@ -66,5 +73,11 @@
   },true);
   new MutationObserver(refresh).observe($('#screen'),{childList:true,subtree:true});
   window.addEventListener('resize',refresh);window.addEventListener('scroll',refresh,true);
-  $('#start-experience').addEventListener('click',refresh);
+  function offerGuide(){hide();intro.showModal();}
+  intro.querySelector('#tour-begin').onclick=()=>{introduced=true;dismissed=false;intro.close();refresh();};
+  function skipIntro(){introduced=true;intro.close();$('#free').click();end();}
+  intro.querySelector('#tour-without-guide').onclick=skipIntro;
+  intro.addEventListener('cancel',e=>{e.preventDefault();skipIntro();});
+  $('#start-experience').addEventListener('click',()=>{if(guide)offerGuide();});
+  $('#guided').addEventListener('click',()=>{if(!introduced)offerGuide();});
 })();
