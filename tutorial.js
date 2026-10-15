@@ -54,7 +54,11 @@
   completion.addEventListener('cancel',()=>{$('#free').click();end();});
   const b=a=>'#screen [data-action="'+a+'"]';
   function step(){
-    if(!introduced||intro.open||completion.open||sampleDialog.open||featureDialog.open||!guide||dismissed||!$('#entry-screen').hidden||$('#info').open||$('#hdmi-picker').open||$('.dialog-shade'))return null;
+    if(!introduced||intro.open||completion.open||sampleDialog.open||featureDialog.open||!guide||dismissed||!$('#entry-screen').hidden||$('#info').open||$('#hdmi-picker').open)return null;
+    if($('.dialog-shade')){
+      if(editPhase==='duration'&&$('#duration'))return ['.screen-dialog','表示時間を「5秒」に選び直して、「保存する」を押してください。次の再生で、素材が切り替わる様子を確認できます。'];
+      return null;
+    }
     if(remoteOutro)return ['.remote-body','リモコンでも操作できます。方向キーで項目を選び、OKで決定します。「戻る」で編集画面に戻れます。案内を終えたら、自由に試してみてください。',true];
     if(page==='off')return ['#power','まずは、電源を入れてみましょう。明るくなっているボタンを押してください。'];
     if(page==='welcome')return [b('go:choice'),'PANELYが起動しました。「はじめる」を押しましょう。'];
@@ -76,7 +80,8 @@
       if(editPhase==='add')return [b('add'),'ここで映す内容を変更できます。「＋ふやす」で、もうひとつ素材を追加しましょう。各項目の？から機能の説明も読めます。'];
       if(editPhase==='select')return [b('edit:'+(list().main.length-1)),'追加した素材を選んで、表示する順番を変えてみましょう。'];
       if(editPhase==='move')return [b('move:-1'),'「前へ」で、選んだ素材の再生順をひとつ前に移します。'];
-      if(editPhase==='replay')return [b('play'),'順番を変更できました。「再生する」で変更した表示を確認しましょう。'];
+      if(editPhase==='duration')return [b('duration'),'次に「表示時間」を開いて、5秒に変更してみましょう。短くすると、次の素材への切り替わりを早く確認できます。'];
+      if(editPhase==='replay')return [b('play'),'順番と表示時間を変更できました。「再生する」で、5秒後に次の素材へ切り替わることを確認しましょう。'];
     }
     if(page==='add'&&!editDone){
       if(picked.length)return [b('add-picked'),'「選んで追加」で、プレイリストに追加します。'];
@@ -93,7 +98,7 @@
     observation.hidden=!observing;
     if(observing){
       observation.querySelector('strong').textContent=editDone?'変更した内容が再生できました。':'再生できました。次は映す内容を変更してみましょう。';
-      observation.querySelector('p').textContent=editDone?'追加した素材と、変更した順番を確認してください。これで基本の操作は完了です。':'映った内容を確認したら、下のボタンで編集画面への戻り方に進めます。';
+      observation.querySelector('p').textContent=editDone?'先ほどの素材が5秒で切り替わることと、変更した順番をご確認ください。これで基本の操作は完了です。':'映った内容を確認したら、下のボタンで編集画面への戻り方に進めます。';
       observation.querySelector('.primary').textContent=editDone?'確認できた：最後の案内へ →':'次へ：編集画面に戻る →';
       if(!wasObserving)observation.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     }
@@ -137,7 +142,8 @@
     if(guide&&!dismissed&&!editDone){
       if(page==='add'&&actionName==='add-picked'&&picked.length)editPhase='select';
       if(page==='manage'&&editPhase==='select'&&actionName?.startsWith('edit:'))editPhase='move';
-      if(page==='manage'&&editPhase==='move'&&actionName==='move:-1')editPhase='replay';
+      if(page==='manage'&&editPhase==='move'&&actionName==='move:-1')editPhase='duration';
+      if(page==='manage'&&editPhase==='duration'&&actionName==='dialog-save'&&$('#duration')?.value==='5')editPhase='replay';
       if(page==='manage'&&editPhase==='replay'&&actionName==='play')editDone=true;
     }
     refresh();
@@ -149,6 +155,7 @@
     if(intro.open||completion.open||sampleDialog.open||featureDialog.open){e.stopImmediatePropagation();return;}
     if(!observation.hidden&&observation.contains(e.target)){e.stopImmediatePropagation();return;}
     if(e.target.closest('[data-feature-help]')){e.stopImmediatePropagation();return;}
+    if(!overlay.hidden&&target?.contains(e.target)&&e.target.matches('select,input,textarea')){e.stopImmediatePropagation();return;}
     if(overlay.hidden)return;
     if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();$('#free').click();end();return;}
     if(e.key==='Tab'){

@@ -13,6 +13,7 @@ context.page='manage';context.tab='main';context.editPhase='add';context.b=a=>'#
 assert.ok(vm.runInContext('step()[0]',context).includes('"add"'));
 context.editPhase='select';assert.ok(vm.runInContext('step()[0]',context).includes('edit:1'));
 context.editPhase='move';assert.ok(vm.runInContext('step()[0]',context).includes('move:-1'));
+context.editPhase='duration';assert.ok(vm.runInContext('step()[0]',context).includes('duration'));
 context.editPhase='replay';assert.ok(vm.runInContext('step()[0]',context).includes('"play"'));
 context.page='play';context.editDone=true;assert.equal(vm.runInContext('step()',context),null,'Edited playback is not obscured by a spotlight');
 context.featureDialog.open=true;assert.equal(vm.runInContext('step()',context),null,'Help pauses the spotlight');
