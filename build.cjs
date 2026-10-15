@@ -13,7 +13,7 @@ for (const name of ['style.css', 'core.js', 'app.js', 'management-help.js', 'tut
   names.set(name, versioned);
   fs.writeFileSync(path.join(out, versioned), data);
 }
-for (const name of ['index.html', 'coverage.html']) {
+for (const name of ['index.html']) {
   let html = fs.readFileSync(path.join(__dirname, name), 'utf8');
   for (const [original, versioned] of names) {
     html = html.replaceAll(`"${original}"`, `"${versioned}"`);
