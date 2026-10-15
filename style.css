@@ -121,3 +121,5 @@ footer{margin:16px 0;font-size:10px}
 #tour-intro p{font-size:15px;line-height:1.9}
 #tour-intro .tour-intro-route{font-size:13px;background:#f4f4f2;border-radius:10px;padding:12px;margin:20px 0}
 #tour-intro .primary{width:100%;min-height:48px}#tour-intro .tour-skip{margin:12px auto 0}
+.management-help{padding:14px;background:white;border:1px solid var(--line);border-radius:14px;font-size:13px}.management-help button{display:block;width:100%;text-align:left;margin:6px 0;font-size:12px}.management-help p{line-height:1.7}
+#tour-complete,#tour-schedule{width:min(560px,calc(100vw - 32px));max-height:85dvh;overflow:auto;padding:26px;border:1px solid var(--line);border-radius:18px} .tour-options{display:grid;gap:10px}.tour-options button{text-align:left;padding:14px}.tour-options small{display:block;color:var(--muted);margin-top:5px}#tour-complete h2,#tour-schedule h2{font-size:22px}#tour-schedule p{line-height:1.8}

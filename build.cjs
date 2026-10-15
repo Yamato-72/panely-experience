@@ -5,7 +5,7 @@ const crypto = require('node:crypto');
 const out = path.resolve(process.argv[2] || path.join(__dirname, 'public'));
 fs.mkdirSync(out, { recursive: true });
 const names = new Map();
-for (const name of ['style.css', 'core.js', 'app.js', 'tutorial.js']) {
+for (const name of ['style.css', 'core.js', 'app.js', 'management-help.js', 'tutorial.js']) {
   const data = fs.readFileSync(path.join(__dirname, name));
   const hash = crypto.createHash('sha256').update(data).digest('hex').slice(0, 12);
   const ext = path.extname(name);
