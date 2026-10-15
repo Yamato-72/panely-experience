@@ -35,7 +35,14 @@
     });
   }
   const completion=document.createElement('dialog');completion.id='tour-complete';completion.setAttribute('aria-label','次の体験');
-  completion.innerHTML='<h2>基本の使い方は、これで完了です。</h2><p>次は何を試しますか？</p><div class="tour-options"><button data-explore="edit">映す内容を変更する<small>素材の追加や順番変更</small></button><button data-explore="hdmi">PC・STBの画面を映す<small>HDMI接続の体験</small></button><button data-explore="remote">リモコンで操作する<small>方向キーで選んで、OKで決定</small></button><button data-explore="schedule">時間割を知る<small>時間帯に合わせた表示の例</small></button><button data-explore="free">自由に試す</button></div>';
+  const exploreIcon=paths=>'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+paths+'</svg>';
+  const exploreChoices=[
+    ['edit','映す内容を変更する','素材の追加・順番の変更','<path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="white"/><circle cx="15" cy="12" r="2" fill="white"/><circle cx="9" cy="17" r="2" fill="white"/>'],
+    ['hdmi','PC・STBの画面を映す','HDMIで映像を表示','<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>'],
+    ['remote','リモコンで操作する','方向キーで選択・OKで決定','<rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M10 17h4M11 5h2"/>'],
+    ['schedule','時間割を知る','時間帯で映す内容を切り替え','<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>']
+  ];
+  completion.innerHTML='<div class="completion-heading"><span class="completion-check" aria-hidden="true">✓</span><span class="completion-eyebrow">基本の操作を体験しました</span><h2 tabindex="-1" autofocus>映す・変更する、ができました。</h2><p>気になる使い方を、続けて試してみましょう。</p></div><div class="tour-options completion-options">'+exploreChoices.map(([id,title,description,paths])=>'<button data-explore="'+id+'"><span class="explore-icon">'+exploreIcon(paths)+'</span><span class="explore-copy"><strong>'+title+'</strong><small>'+description+'</small></span><span class="explore-arrow" aria-hidden="true">→</span></button>').join('')+'</div><div class="completion-footer"><button data-explore="free">自由に試す <span aria-hidden="true">→</span></button><small>各機能の説明は、編集画面の「？」から確認できます。</small></div>';
   document.body.append(completion);
   const sampleDialog=document.createElement('dialog');sampleDialog.id='tour-schedule';sampleDialog.innerHTML='<h2>時間割で映す内容を切り替える</h2><p>実機では、時刻とプレイリストを登録して自動で切り替えられます。ここではタイマーを設定せず、表示例を確認します。</p><div class="tour-options"><button data-period="昼">昼の表示を見る</button><button data-period="夕方">夕方の表示を見る</button></div><p id="period-example" aria-live="polite">昼：ランチメニュー ／ 夕方：ディナーメニュー</p><form method="dialog"><button>閉じる</button></form>';
   document.body.append(sampleDialog);

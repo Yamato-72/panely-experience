@@ -142,3 +142,16 @@ footer{margin:16px 0;font-size:10px}
 /* Playback is a display surface; content and pixel-shift must not create scrollbars. */
 #screen.play,#screen.hdmi,#screen.boot,#screen.off{overflow:hidden}
 #screen.play>.art{height:100%;min-height:0;max-height:100%}
+/* Completion: clear hierarchy, compact choices, and a separate free-exploration action. */
+#tour-complete{width:min(660px,calc(100vw - 32px));max-width:660px;padding:30px;border-radius:22px;background:#fcfcfb;box-shadow:0 24px 80px #17151f33}
+.completion-heading{text-align:center;margin-bottom:24px}.completion-check{display:flex;align-items:center;justify-content:center;width:42px;height:42px;margin:0 auto 12px;background:#e6f0e9;color:#397251;border-radius:50%;font-size:22px}.completion-eyebrow{font-size:12px;color:#657368;letter-spacing:.04em}
+#tour-complete h2{font-size:23px;line-height:1.5;margin:8px 0;outline:none}#tour-complete .completion-heading p{font-size:13px;margin:0;color:#77717f;line-height:1.7}
+#tour-complete .completion-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#tour-complete .completion-options button{display:flex;align-items:center;gap:10px;min-height:94px;padding:16px 12px;background:white;border:1px solid #e1dfe5;border-radius:12px;box-shadow:none;transition:border-color .15s,background .15s}
+#tour-complete .completion-options button:hover{background:#f5f3f2;border-color:#aaa2ae}
+#tour-complete button:focus-visible{outline:2px solid #ad3d49;outline-offset:3px}
+.explore-icon{display:flex;align-items:center;justify-content:center;flex:0 0 32px;color:#67616c}.explore-icon svg{width:25px;height:25px}.explore-copy{flex:1;min-width:0}.explore-copy strong{font-size:13px;font-weight:650;line-height:1.5}.explore-arrow{font-size:16px;color:#8f8793}
+#tour-complete .explore-copy small{font-size:11px;line-height:1.6;margin-top:5px}
+.completion-footer{border-top:1px solid #e8e5e9;margin-top:22px;padding-top:20px;text-align:center}.completion-footer button{padding:12px 30px;min-height:46px;background:#17151f;color:white;border-radius:10px;font-size:14px;font-weight:600}.completion-footer button span{margin-left:24px}.completion-footer>small{display:block;margin-top:12px;font-size:11px;color:#77717f;line-height:1.7}
+@media(max-width:540px){#tour-complete{padding:22px 18px}.completion-heading{margin-bottom:18px}#tour-complete h2{font-size:20px}#tour-complete .completion-options{grid-template-columns:1fr}#tour-complete .completion-options button{min-height:72px;padding:12px 14px}.completion-footer{margin-top:18px;padding-top:16px}.completion-footer button{width:100%}}
+@media(prefers-reduced-motion:reduce){#tour-complete .completion-options button{transition:none}}
