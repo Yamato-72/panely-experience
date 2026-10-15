@@ -139,3 +139,6 @@ footer{margin:16px 0;font-size:10px}
 @keyframes tour-focus-in{from{box-shadow:0 0 0 9999px #080b1600;border-color:transparent}35%{border-color:#fff;box-shadow:0 0 0 9999px #080b1630}to{box-shadow:0 0 0 9999px #080b16a8;border-color:#fff}}
 @keyframes tour-note-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){#tutorial:not([hidden]) .tour-hole,#tutorial:not([hidden]) .tour-card{animation:none}.tour-hole{box-shadow:0 0 0 9999px #080b16a8}}
+/* Playback is a display surface; content and pixel-shift must not create scrollbars. */
+#screen.play,#screen.hdmi,#screen.boot,#screen.off{overflow:hidden}
+#screen.play>.art{height:100%;min-height:0;max-height:100%}
