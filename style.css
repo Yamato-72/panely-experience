@@ -69,3 +69,20 @@ footer{margin:16px 0;font-size:10px}
 .edit-shortcut{font-size:11px;padding:5px 12px;background:white;border-color:#ccc8d4}
 .edit-shortcut:disabled{opacity:.4}
 @media(max-width:760px){.intro{flex-wrap:wrap}.experience-toolbar{width:100%;justify-content:space-between;gap:8px}.restart-button{font-size:11px;padding:8px 11px}.stage-tools{gap:4px}.edit-shortcut{font-size:10px;padding:5px 8px}}
+.hdmi-picker{max-width:620px;width:calc(100% - 32px)}
+.source-choices{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+.source-choices button{display:flex;flex-direction:column;align-items:flex-start;gap:8px;border-radius:16px;padding:20px;text-align:left;background:var(--paper)}
+.source-choice-icon{font-size:32px;line-height:1.3}.source-choices strong{font-size:15px}.source-choices small{font-size:12px;color:var(--muted)}
+.hdmi-dock{display:flex;align-items:center;gap:16px;border-top:1px solid #d8dad7;padding-top:12px;margin-top:12px}
+.source-device{width:148px;flex-shrink:0;text-align:center}.source-device>small{font-size:10px;color:var(--muted)}
+#source-preview{height:83px;border:4px solid #292b2e;border-radius:5px;overflow:hidden;container-type:inline-size;background:#111}
+.hdmi-dock-info{min-width:0;flex:1}.hdmi-dock-info p{margin:0 0 8px;font-size:12px;line-height:1.6}.hdmi-dock-info>small{font-size:10px;color:var(--muted)}
+.source-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:5px}.source-actions button{font-size:11px;padding:6px 11px}
+#show-hdmi{background:var(--ink);color:white}.has-hdmi-source .display-wrap{max-width:calc(max(230px,100dvh - 485px) * 1.6 + 20px)}
+.has-hdmi-source.portrait .display-wrap{max-width:calc(max(230px,100dvh - 485px) * .5625 + 20px)}
+.source-picture{height:100%;width:100%;position:relative;overflow:hidden;text-align:left;font-family:'Yu Gothic UI',sans-serif}
+.source-pc{background:linear-gradient(140deg,#b8cfdf,#5c7791);padding:4% 5% 7%;color:#183641}
+.source-desktop-bar{height:8%;font-size:1.25cqw;letter-spacing:.15em;color:#455964;background:#e9f0f3;border-radius:5px 5px 0 0;padding:1% 2%;display:flex;align-items:center;gap:4%}.source-desktop-bar span{letter-spacing:0}
+.source-slide{position:relative;height:88%;padding:7%;background:#f9f7ef;display:flex;flex-direction:column;justify-content:center;gap:7%;overflow:hidden}.source-slide>small{font-size:1.5cqw;letter-spacing:.16em;z-index:1}.source-slide>strong{font-size:4.5cqw;line-height:1.5;z-index:1}.source-slide>span{font-size:1.4cqw;z-index:1}.source-slide-shape{position:absolute;width:40%;aspect-ratio:1;right:-14%;top:12%;border:3cqw solid #a2beb2;border-radius:50%}.source-taskbar{position:absolute;bottom:0;left:0;width:100%;height:5%;background:#e9f0f3b8;text-align:center;font-size:1.5cqw;line-height:1.6}
+.source-stb{background:#123e3b;color:#f2e8cc;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:9%;gap:5%}.source-stb>small{font-size:1.5cqw;letter-spacing:.16em;z-index:1}.source-stb>strong{font:500 8cqw/.95 Georgia,serif;z-index:1}.source-stb>span{font-size:2cqw;z-index:1}.source-stb>b{font-size:1.3cqw;font-weight:400;letter-spacing:.15em;z-index:1}.source-stb-line{position:absolute;width:58%;height:120%;right:-17%;top:-10%;border:1px solid #c1cfa577;border-radius:50%;transform:rotate(30deg)}.source-stb-menu{background:#e8d8bd;color:#533a28}
+@media(max-width:760px){.hdmi-dock{gap:10px;align-items:flex-start}.source-device{width:100px}#source-preview{height:57px}.hdmi-dock-info p{font-size:11px}.source-actions button{font-size:10px;padding:6px 9px}.has-hdmi-source .display-wrap{max-width:100%}.source-choices{grid-template-columns:1fr}.source-choices button{padding:15px}.source-choice-icon{display:none}}
