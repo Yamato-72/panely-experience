@@ -13,13 +13,23 @@
   const hole=overlay.querySelector('.tour-hole'),card=overlay.querySelector('.tour-card'),text=card.querySelector('p'),finish=card.querySelector('.tour-finish');
   let dismissed=false,target=null,stepKey='',frame=0,revealTimer=null,revealReady=false;
   let editDone=false,editPhase="add",remoteOutro=false;
+  let remoteStep=0;
+  const remoteLessons=[
+    ['.remote-dpad','方向キー・OK','方向キーで画面内の項目を選び、中央のOKで決定します。'],
+    ['.remote-back','戻る','ひとつ前の画面に戻ります。再生中に押すと、編集画面に戻れます。'],
+    ['.remote-home','ホーム','現在、再生するように選ばれている内容へ戻ります。'],
+    ['.remote-menu','入力切替','HDMIの映像に直接切り替えます。ホームを押すと、元の再生内容へ戻れます。'],
+    ['.remote-power','電源','ディスプレイの電源を入れたり、切ったりします。']
+  ];
+  const remoteNext=document.createElement('button');remoteNext.className='primary';remoteNext.hidden=true;card.insertBefore(remoteNext,finish);
+  remoteNext.onclick=()=>{remoteStep++;refresh();};
   let playbackSeen=false;
   const observation=document.createElement('section');
   observation.className='tour-observation';observation.hidden=true;
   observation.setAttribute('aria-label','再生の確認');
   observation.innerHTML='<div class="observation-copy"><small>操作ガイドは続きます</small><strong></strong><p></p></div><div class="observation-actions"><button class="primary">次へ →</button><button class="tour-skip">自由に操作する</button></div>';
   $('.display-wrap').after(observation);
-  observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;remoteOutro=true;}else playbackSeen=true;refresh();};
+  observation.querySelector('.primary').onclick=()=>{if(editDone){observation.hidden=true;remoteStep=0;remoteOutro=true;}else playbackSeen=true;refresh();};
   observation.querySelector('.tour-skip').onclick=()=>{$('#free').click();end();};
 
   const featureDialog=document.createElement('dialog');featureDialog.id='feature-help';featureDialog.setAttribute('aria-labelledby','feature-title');
@@ -59,7 +69,7 @@
       if(editPhase==='duration'&&$('#duration'))return ['.screen-dialog','表示時間を「5秒」に選び直して、「保存する」を押してください。次の再生で、素材が切り替わる様子を確認できます。'];
       return null;
     }
-    if(remoteOutro)return ['.remote-body','画面のボタンに加えて、リモコンでも操作できます。方向キーで項目を選び、OKで決定します。「戻る」で編集画面に戻れます。',true];
+    if(remoteOutro){const lesson=remoteLessons[remoteStep];return [lesson[0],(remoteStep+1)+' / '+remoteLessons.length+'　'+lesson[1]+'：'+lesson[2],remoteStep===remoteLessons.length-1];}
     if(page==='off')return ['#power','まずは、電源を入れてみましょう。明るくなっているボタンを押してください。'];
     if(page==='welcome')return [b('go:choice'),'PANELYが起動しました。「はじめる」を押しましょう。'];
     if(page==='choice')return [b('choose:content'),'まずはUSBで写真・動画を映してみましょう。「写真・動画」を押してください。'];
@@ -103,7 +113,7 @@
       observation.querySelector('.primary').textContent=editDone?'リモコンの使い方を見る →':'次へ：編集画面に戻る →';
       if(!wasObserving)observation.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     }
-    const next=step();if(!next){hide();return;}
+    const next=step();remoteNext.hidden=!remoteOutro||!next||remoteStep>=remoteLessons.length-1;remoteNext.textContent=remoteStep<remoteLessons.length-1?'次へ：'+remoteLessons[remoteStep+1][1]+' →':'';if(!next){hide();return;}
     const el=document.querySelector(next[0]);if(!el){hide();return;}
     const key=next[0]+next[1];
     if(key!==stepKey){
