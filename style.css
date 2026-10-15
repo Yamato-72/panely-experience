@@ -25,40 +25,41 @@
 .remote .remote-note{font-size:10px;color:var(--muted);margin-top:12px}.remote-note p{margin-top:8px}
 @media(max-width:760px){.remote{padding:14px 8px}.remote-head{justify-content:center}.remote-head span+span{display:none}.remote-body{width:142px;height:548px;padding-left:12px;padding-right:12px}.remote>p,.remote-note{padding:0 5px}}
 @media(max-width:420px){.experience aside{grid-template-columns:minmax(0,1fr)}.remote-head{justify-content:space-between;padding:0 10px}.remote-head span+span{display:inline}}
-/* Keep the display, connection controls and remote together in the viewport. */
+/* Balanced workspace: display on the left, a readable control column on the right. */
 .site-head{height:56px}
-.intro{padding:16px 0 18px;align-items:center;gap:20px}
+.intro{padding:12px 0 16px;align-items:center;gap:20px}
 .intro .eyebrow{display:none}
 .intro h1{font-size:25px;margin:0 0 5px;line-height:1.35}
-.intro p:not(.eyebrow){font-size:11px;line-height:1.6}
+.intro p:not(.eyebrow){font-size:12px;line-height:1.6}
 .intro p:not(.eyebrow) br{display:none}
-.experience{grid-template-columns:minmax(0,1fr) 374px;gap:20px}
-.experience aside{display:grid;grid-template-columns:minmax(0,1fr) 174px;align-items:start;gap:12px}
-.guide{padding:16px}
-.guide .progress{margin:10px 0 16px}
-.guide h2{font-size:18px;margin:8px 0 10px}
-.guide-note{margin:16px 0}
+.experience{grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+.experience aside{display:flex;flex-direction:column;gap:12px;min-width:0}
+.experience aside>section,.experience aside>.lab{width:100%}
+.guide{padding:16px 18px}
+.guide .progress{margin:9px 0 12px}
+.guide .eyebrow{margin:8px 0 4px;font-size:9px}
+.guide h2{font-size:18px;margin:4px 0 8px;line-height:1.5;text-wrap:pretty}
+.guide p:not(.eyebrow){font-size:12px;line-height:1.7;margin:8px 0}
+.guide-note{font-size:10px;margin:10px 0;line-height:1.7}
+.guide details{padding-top:9px}
 .stage{padding:12px 16px}
+.stage-top .quiet{padding:4px 8px}
 .display-wrap{width:100%;max-width:calc(max(230px,100dvh - 355px) * 1.6 + 20px);margin:8px auto 0}
 .portrait .display-wrap{width:100%;max-width:calc(max(230px,100dvh - 355px) * .5625 + 20px)}
-.connections{margin-top:14px}
-.simulation-note{margin-top:9px}
-.remote{margin-top:0;padding:12px 10px}
-.remote-head{justify-content:center}
-.remote-head span+span{display:none}
-.remote-body{width:148px;height:330px;margin:12px auto 14px;padding:20px 15px 0;border-radius:10px 10px 12px 12px}
+.connections{margin-top:12px;gap:10px}
+.connection{padding:9px 14px}
+.simulation-note{margin-top:8px}
+.remote{margin:0;padding:14px 16px;display:grid;grid-template-columns:148px minmax(0,1fr);column-gap:16px;row-gap:10px;align-items:start}
+.remote-head{grid-column:1/-1;justify-content:space-between;align-items:center}
+.remote-head span+span{display:inline;font-size:8px}
+.remote-body{grid-column:1;grid-row:2/4;width:148px;height:330px;margin:0;padding:20px 15px 0;border-radius:10px 10px 12px 12px}
 .remote-dpad{margin-top:10px;margin-bottom:12px}
-.remote>p{font-size:10px;line-height:1.6}
-.remote-note{line-height:1.6}
-.lab{grid-column:1/-1;margin:0;padding:0 4px}
-footer{margin:14px 0;font-size:9px}
-@media(min-width:761px){.experience aside:has(.guide.hidden){grid-template-columns:1fr 174px}.experience aside:has(.guide.hidden) .remote{grid-column:2}.experience aside:has(.guide.hidden) .lab{grid-column:1/-1}}
-@media(max-width:1050px) and (min-width:761px){main{padding:0 2%}.experience{grid-template-columns:minmax(0,1fr) 340px;gap:12px}.experience aside{grid-template-columns:minmax(0,1fr) 164px;gap:8px}.guide{padding:12px}.remote{padding:12px 5px}.stage{padding:10px}.intro h1{font-size:23px}}
-@media(max-width:760px){.site-head{height:52px}.intro{padding:12px 0;gap:10px}.intro h1{font-size:22px}.intro p:not(.eyebrow){font-size:10px}.intro .mobile{display:none}.mode-switch{flex-direction:row}.mode-switch button{padding:6px 9px}.experience{gap:12px}.experience aside{grid-template-columns:minmax(0,1fr) 174px;gap:10px;align-items:start}.display-wrap{max-width:100%}.portrait .display-wrap{width:65%;max-width:280px}.remote-body{width:148px;height:330px;padding:20px 15px 0}.remote>p,.remote-note{padding:0}.remote-head{padding:0}.remote-head span+span{display:none}}
-@media(max-width:380px){.experience aside{grid-template-columns:minmax(0,1fr)}.intro{flex-wrap:wrap}.remote-body{margin-left:auto;margin-right:auto}}
-
-.stage-top .quiet{padding:4px 8px}
-.connections{margin-top:10px}
-.connection{padding:8px 12px}
-.simulation-note{margin-top:6px}
-.intro{padding-top:10px;padding-bottom:12px}
+.remote>p{grid-column:2;grid-row:2;font-size:11px;line-height:1.8;margin:8px 0 0;padding:0;align-self:end}
+.remote .remote-note{grid-column:2;grid-row:3;font-size:10px;line-height:1.7;margin:0;padding:10px 0 0;border-top:1px solid var(--line)}
+.remote-note p{font-size:10px;line-height:1.7}
+.lab{margin:0;padding:5px 4px;font-size:11px}
+.lab label{margin:12px 0 6px}
+footer{margin:16px 0;font-size:10px}
+@media(max-width:1050px) and (min-width:761px){main{padding:0 2%}.experience{grid-template-columns:minmax(0,1fr) 300px;gap:14px}.remote{padding:12px;column-gap:12px}.stage{padding:10px}.intro h1{font-size:23px}}
+@media(max-width:760px){.site-head{height:52px}.intro{padding:12px 0;gap:10px}.intro h1{font-size:22px}.intro p:not(.eyebrow){font-size:11px}.intro .mobile{display:none}.mode-switch{flex-direction:row}.mode-switch button{padding:6px 9px}.experience{gap:12px}.experience aside{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}.display-wrap{max-width:100%}.portrait .display-wrap{width:65%;max-width:280px}.remote{display:flex;flex-direction:column;align-items:center;padding:12px}.remote-head{width:100%;justify-content:center;padding:0}.remote-head span+span{display:none}.remote-body{flex-shrink:0;width:148px;height:330px;padding:20px 15px 0;margin:0}.remote>p{font-size:10px;width:100%;align-self:auto}.remote .remote-note{width:100%}.lab{grid-column:1/-1}}
+@media(max-width:480px){.experience aside{display:flex}.remote{display:grid;grid-template-columns:148px minmax(0,1fr);column-gap:16px;padding:14px 16px}.remote-head{justify-content:space-between}.remote-head span+span{display:inline}.remote>p{font-size:11px;align-self:end}.intro{flex-wrap:wrap}}
